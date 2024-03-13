@@ -1,0 +1,8 @@
+.navigation {
+  display: flex;
+  gap: 15px;
+}
+
+.navLink.active {
+  color: orange;
+}

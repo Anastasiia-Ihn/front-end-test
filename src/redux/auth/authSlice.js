@@ -1,10 +1,11 @@
-import { logIn, logOut, signup } from './authOperations';
+import { logIn, logOut, refreshUser, signup } from './authOperations';
 
 const { createSlice } = require('@reduxjs/toolkit');
 const initialState = {
   user: { username: '', email: '' },
   isLoggedIn: false,
   token: null,
+  isRefreshing: false,
 };
 export const authSlice = createSlice({
   name: 'auth',
@@ -25,6 +26,17 @@ export const authSlice = createSlice({
         state.user = { name: null, email: null };
         state.token = null;
         state.isLoggedIn = false;
+      })
+      .addCase(refreshUser.pending, state => {
+        state.isRefreshing = true;
+      })
+      .addCase(refreshUser.fulfilled, (state, { payload }) => {
+        state.user = payload;
+        state.isRefreshing = false;
+        state.isLoggedIn = true;
+      })
+      .addCase(refreshUser.rejected, state => {
+        state.isRefreshing = false;
       }),
 });
 
